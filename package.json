@@ -1,9 +1,12 @@
 {
   "name": "phrasalexpressions",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "description": "Helps to create regular expressions in typescript from phrases.",
-  "main": "index.js",
+  "main": "dist/phrasalexpressions.js",
+  "typings": "dist/phrasalexpressions.d.ts",
   "scripts": {
+    "prepublish": "npm run build",
+    "build" : "tsc",
     "serve": "ts-node ./src/index.ts",
     "test": "NODE_ENV='test' TS_NODE_PROJECT='./tsconfig.json' mocha --file ./tests/init.ts --require ts-node/register --recursive ./tests/**/*.tests.ts --exit"
   },

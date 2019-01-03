@@ -1,4 +1,4 @@
-import { Phrexp } from '../src/phrexp';
+import { Phrexp } from '../src/phrasalexpressions';
 import { assert } from 'chai';
 
 describe('Phrexp to regexp', function () {
