@@ -1,11 +1,11 @@
-import { AST } from '../src/ast';
+import { Phrexp } from '../src/phrexp';
 import { assert } from 'chai';
 
-describe('Ast to regexp', function () {
+describe('Phrexp to regexp', function () {
 
   it('Regexp for simple char \'e\' should be /e/gm', () => {
     assert.equal(
-      new AST()
+      new Phrexp()
         .findChar('e')
         .toRegExp()
         .toString()
@@ -14,7 +14,7 @@ describe('Ast to regexp', function () {
 
   it('Regexp for any char should be /./gm', () => {
     assert.equal(
-      new AST()
+      new Phrexp()
         .findAnyChar()
         .toRegExp()
         .toString()
@@ -23,7 +23,7 @@ describe('Ast to regexp', function () {
 
   it('Regexp for any char (linebreaks included) should be /[\\s\\S]/gm', () => {
     assert.equal(
-      new AST()
+      new Phrexp()
         .findAnything()
         .toRegExp()
         .toString()
@@ -32,7 +32,7 @@ describe('Ast to regexp', function () {
 
   it('Regexp for any digit or tab or char \'a\' should be /[d\\ta]/gm', () => {
     assert.equal(
-      new AST()
+      new Phrexp()
         .findInChars('digit','tab','a')
         .toRegExp()
         .toString()
@@ -41,7 +41,7 @@ describe('Ast to regexp', function () {
 
   it('Regexp for simple char \'.\' should be /\\./gm', () => {
     assert.equal(
-      new AST()
+      new Phrexp()
         .findChar('.')
         .toRegExp()
         .toString()
@@ -51,13 +51,13 @@ describe('Ast to regexp', function () {
 
   it('Regexp for string \'abc\' should be /abc/gm', () => {
     assert.equal(
-      new AST()
+      new Phrexp()
         .findString('abc')
         .toRegExp()
         .toString()
     ,'/abc/gm');
   });
 
-  
+
 
 });

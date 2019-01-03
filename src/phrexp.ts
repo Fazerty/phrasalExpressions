@@ -65,9 +65,9 @@ declare module 'regexp-tree' {
  *
  *
  * @export
- * @class AST
+ * @class Phrexp
  */
-export class AST {
+export class Phrexp {
   private capturingGroupNumber: number = 0;
 
   /**
@@ -75,7 +75,7 @@ export class AST {
    *
    * @private
    * @type {AstRegExp}
-   * @memberof AST
+   * @memberof Phrexp
    */
   private astRegExp: AstRegExp = new IAstRegExp();
 
@@ -84,7 +84,7 @@ export class AST {
    *
    * @private
    * @type {Expression[]}
-   * @memberof AST
+   * @memberof Phrexp
    */
   private currentPath: ParentExpression[] = new Array<ParentExpression>();
 
@@ -92,9 +92,9 @@ export class AST {
    * Find a simple char
    * specials (more than 2 characters) ('char' ,'any', 'digit', 'notDigit' , 'alphanumeric', 'notAlphanumeric', 'whitespace', 'notWhitespace', 'tab')
    * @param {string} value
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public findChar(value: string): AST {
+  public findChar(value: string): Phrexp {
     switch (value) {
       case 'char': {
         addExpression(this.currentExpression(), anyChar());
@@ -158,9 +158,9 @@ export class AST {
    * Find any character
    *
    * @param {string} value
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public findAnyChar(): AST {
+  public findAnyChar(): Phrexp {
     this.findChar('char');
     return this;
   }
@@ -169,9 +169,9 @@ export class AST {
    * Find any character linebreaks included
    *
    * @param {string} value
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public findAnything(): AST {
+  public findAnything(): Phrexp {
     this.findChar('any');
     return this;
   }
@@ -181,9 +181,9 @@ export class AST {
    *
    * @param {string} values a list of character, ranges (two characters) or
    *
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public findInChars(...values: string[]): AST {
+  public findInChars(...values: string[]): Phrexp {
     const characterClass: ICharacterClass = new ICharacterClass();
     addExpression(this.currentExpression(), characterClass);
     this.currentPath.push();
@@ -206,9 +206,9 @@ export class AST {
    * Add a string to the expression
    *
    * @param {string} value
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public findString(value: string): AST {
+  public findString(value: string): Phrexp {
     const concatenation: Alternative = new IConcatenation();
     sanitize(value)
       .split('')
@@ -225,9 +225,9 @@ export class AST {
   /**
    * Specifiy that the next expression will follow the beginning of the line.
    *
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public startOfLine(): AST {
+  public startOfLine(): Phrexp {
     const startOfLine: Assertion = new ISimpleAssertion(StartOfLine);
     addExpression(this.currentExpression(), startOfLine);
     return this;
@@ -236,9 +236,9 @@ export class AST {
   /**
    * Mark the end at the last character of the line.
    *
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public endOfLine(): AST {
+  public endOfLine(): Phrexp {
     const startOfLine: Assertion = new ISimpleAssertion(EndOfLine);
     addExpression(this.currentExpression(), startOfLine);
     return this;
@@ -248,9 +248,9 @@ export class AST {
    * Add a string to the expression that might appear once (or not).
    *
    * @param {Expression} value
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public maybe(value: string): AST {
+  public maybe(value: string): Phrexp {
     this.beginRepetition(0, 1);
     this.findString(value);
     this.endRepetition();
@@ -261,9 +261,9 @@ export class AST {
    * Match any character(s) or linebreaks any (including zero) number of times.
    *
    * @param {Expression} exp
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public anything(): AST {
+  public anything(): Phrexp {
     this.beginRepetition(0);
     this.findInChars();
     this.endRepetition();
@@ -275,9 +275,9 @@ export class AST {
    *
    * @param {Expression} exp
    * @param {(Expression | string[])} value
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public anythingBut(value: string): AST {
+  public anythingBut(value: string): Phrexp {
     return this;
   }
 
@@ -285,9 +285,9 @@ export class AST {
    * Match any character(s) or linebreaks at least once.
    *
    * @returns {Expression}
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public something(): AST {
+  public something(): Phrexp {
     return this;
   }
 
@@ -295,9 +295,9 @@ export class AST {
    * Match any character(s)  or linebreaks at least once except the ones in the value.
    *
    * @returns {Expression}
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public somethingBut(value: string[]): AST {
+  public somethingBut(value: string[]): Phrexp {
     return this;
   }
 
@@ -305,9 +305,9 @@ export class AST {
    * Match any of the provided strings
    *
    * @param {(Expression | string[])} value
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public anyOf(value: string[]): AST {
+  public anyOf(value: string[]): Phrexp {
     return this;
   }
 
@@ -315,9 +315,9 @@ export class AST {
    * Ensure that the parameter does not follow.
    *
    * @param {Expression} value
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public not(value: Expression): AST {
+  public not(value: Expression): Phrexp {
     return this;
   }
 
@@ -325,9 +325,9 @@ export class AST {
    * Add expression to match a range (or multiply ranges)
    *
    * @param {...string[]} values
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public range(...values: string[]): AST {
+  public range(...values: string[]): Phrexp {
     return this;
   }
 
@@ -337,9 +337,9 @@ export class AST {
    * Specifiy that the next expression is repeated exactly count times.
    *
    * @param {number} count
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public repeat(count: number): AST {
+  public repeat(count: number): Phrexp {
     return this;
   }
 
@@ -347,9 +347,9 @@ export class AST {
    * Specifiy that the next expression is repeated one or more times..
    *
    * @returns {Expression}
-   * @memberof AST
+   * @memberof Phrexp
    */
-  public oneOrMore(): AST {
+  public oneOrMore(): Phrexp {
     return this;
   }
 
@@ -360,7 +360,7 @@ export class AST {
    * @param {string} value
    * @param {number} lower
    * @param {number} [upper]
-   * @memberof AST
+   * @memberof Phrexp
    */
   public multiple(value: string, lower: number, upper?: number) {
     return this;
@@ -369,7 +369,7 @@ export class AST {
   /**
    * Starts a capturing group.
    *
-   * @memberof AST
+   * @memberof Phrexp
    */
   public beginCapture() {
     const capturingGroup: CapturingGroup = new ICapturingGroup(
@@ -383,7 +383,7 @@ export class AST {
   /**
    * Ends a capturing group.
    *
-   * @memberof AST
+   * @memberof Phrexp
    */
   public endCapture() {
     if (
@@ -400,7 +400,7 @@ export class AST {
   /**
    * Start a disjunction
    *
-   * @memberof AST
+   * @memberof Phrexp
    */
   public beginDisjunction() {
     const disjunction: Disjunction = new IDisjunction();
@@ -413,7 +413,7 @@ export class AST {
   /**
    * Ends a disjunction.
    *
-   * @memberof AST
+   * @memberof Phrexp
    */
   public endDisjunction() {
     if ((this.currentExpression() as any).type === 'Disjunction') {
@@ -430,7 +430,7 @@ export class AST {
    * @param {number} from
    * @param {number} to
    * @param {boolean} [greedy]
-   * @memberof AST
+   * @memberof Phrexp
    */
   public beginRepetition(from: number, to?: number, greedy?: boolean) {
     const expression: Expression = getEmptyExpression();
@@ -456,7 +456,7 @@ export class AST {
   /**
    * Ends a repetition.
    *
-   * @memberof AST
+   * @memberof Phrexp
    */
   public endRepetition() {
     if (
@@ -474,7 +474,7 @@ export class AST {
    * Converts the Ast Expression to a RegExp object
    *
    * @returns {RegExp}
-   * @memberof AST
+   * @memberof Phrexp
    */
   public toRegExp(): RegExp {
     return generate(this.astRegExp);
@@ -485,7 +485,7 @@ export class AST {
    *
    * @private
    * @returns {(Expression)}
-   * @memberof AST
+   * @memberof Phrexp
    */
   private currentExpression(): ParentExpression {
     if (this.currentPath.length === 0) {
@@ -499,7 +499,7 @@ export class AST {
    *
    *
    * @private
-   * @memberof AST
+   * @memberof Phrexp
    */
   private leaveCurrentPath(): void {
     if (this.currentPath.length < 2) {
