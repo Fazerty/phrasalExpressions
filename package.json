@@ -1,0 +1,40 @@
+{
+  "name": "phrasalexpressions",
+  "version": "1.0.0",
+  "description": "Helps to create regular expressions in typescript from phrases.",
+  "main": "index.js",
+  "scripts": {
+    "serve": "ts-node ./src/index.ts",
+    "test": "NODE_ENV='test' TS_NODE_PROJECT='./tsconfig.json' mocha --file ./tests/init.ts --require ts-node/register --recursive ./tests/**/*.tests.ts --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fazerty/phrasalExpressions.git"
+  },
+  "keywords": [
+    "regular",
+    "expressions",
+    "typescript",
+    "phrases",
+    "create",
+    "generate",
+    "regexp"
+  ],
+  "author": "Fabien Dubail",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Fazerty/phrasalExpressions/issues"
+  },
+  "homepage": "https://github.com/Fazerty/phrasalExpressions#readme",
+  "dependencies": {
+    "regexp-tree": "0.0.85"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  }
+}
