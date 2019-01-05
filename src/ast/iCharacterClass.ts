@@ -1,4 +1,4 @@
-import { aWhitespace, notAWhitespace, aTab, aDigit } from './iSimpleChar';
+import { aWhitespace, notAWhitespace, aTab, aDigit } from './iSpecialChar';
 import { CharacterClass, Char, ClassRange } from './interfaces';
 
 export class ICharacterClass implements CharacterClass {

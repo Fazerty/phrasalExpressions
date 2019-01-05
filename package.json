@@ -6,7 +6,7 @@
   "typings": "dist/phrasalexpressions.d.ts",
   "scripts": {
     "prepublish": "npm run build",
-    "build" : "tsc",
+    "build": "tsc",
     "serve": "ts-node ./src/index.ts",
     "test": "NODE_ENV='test' TS_NODE_PROJECT='./tsconfig.json' mocha --file ./tests/init.ts --require ts-node/register --recursive ./tests/**/*.tests.ts --exit"
   },

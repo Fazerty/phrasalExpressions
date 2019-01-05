@@ -118,9 +118,6 @@ function prepareParent(exp: Expression): Expression {
     const allowedParentType: string[] = [
         'CharacterClass',
         'Alternative',
-        //'Disjunction',
-        //'Group',
-        'Repetition',
         'LookaroundAssertion',
         'RegExp'
     ];

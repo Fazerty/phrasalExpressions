@@ -18,6 +18,10 @@ export class ISimpleQuantifier implements SimpleQuantifier {
 
     constructor(kind: quantifierKind, greedy?: boolean) {
         this.kind = kind;
-        this.greedy = greedy ? greedy : true;
+        if (typeof greedy === 'undefined') {
+            this.greedy = true;
+          } else {
+            this.greedy = greedy;
+          }
     }
 }

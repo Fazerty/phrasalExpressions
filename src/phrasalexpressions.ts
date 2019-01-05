@@ -1,4 +1,4 @@
-import { generate } from 'regexp-tree';
+import { generate, toRegExp } from 'regexp-tree';
 import {
   AstRegExp,
   Expression,
@@ -22,15 +22,15 @@ import {
   StartOfLine,
   EndOfLine,
 } from './ast/iSimpleAssertion';
+import { ISimpleChar } from './ast/iSimpleChar';
 import {
-  ISimpleChar,
   aWhitespace,
   notAWhitespace,
   aDigit,
   anAlphaNumeric,
   notAnAlphaNumeric,
   aTab,
-} from './ast/iSimpleChar';
+} from './ast/iSpecialChar';
 import { IAstRegExp } from './ast/iAstRegExp';
 import { ICapturingGroup } from './ast/iCapturingGroup';
 import { INoncapturingGroup } from './ast/iNonCapturingGroup';
@@ -44,7 +44,12 @@ import {
 } from './ast/iSimpleQuantifier';
 import { IRangeQuantifier } from './ast/iRangeQuantifier';
 import { IDisjunction } from './ast/IDisjunction';
-import { CharacterClass, ClassRange, SpecialChar } from './ast/interfaces';
+import {
+  CharacterClass,
+  ClassRange,
+  SpecialChar,
+  NoncapturingGroup,
+} from './ast/interfaces';
 import { ICharacterClass } from './ast/iCharacterClass';
 import { IClassRange } from './ast/iClassRange';
 import { anyChar } from './ast/iSpecialChar';
@@ -56,7 +61,7 @@ declare module 'regexp-tree' {
 
   export function parse(s: string | RegExp, options?: ParserOptions): AstRegExp;
 
-  export function generate(ast: AstRegExp): RegExp;
+  export function generate(ast: AstRegExp): string;
 
   export function toRegExp(regexp: string): RegExp;
 }
@@ -102,16 +107,16 @@ export class Phrexp {
       }
       case 'any': {
         // characters and linebreaks
-        if ((this.currentExpression() as CharacterClass).type === 'CharacterClass'){
-            addExpression(this.currentExpression(), aWhitespace());
-            addExpression(this.currentExpression(), notAWhitespace());
+        if (this.currentExpression().type !== 'CharacterClass' && this.currentExpression().type !== 'Repetition' ) {
+          const characterClass: CharacterClass = new ICharacterClass();
+          addExpression(this.currentExpression(), characterClass);
+          this.currentPath.push(characterClass);
+          addExpression(this.currentExpression(), aWhitespace());
+          addExpression(this.currentExpression(), notAWhitespace());
+          this.leaveCurrentPath();
         } else {
-            const characterClass: CharacterClass = new ICharacterClass();
-            addExpression(this.currentExpression(), characterClass);
-            this.currentPath.push(characterClass);
-            addExpression(this.currentExpression(), aWhitespace());
-            addExpression(this.currentExpression(), notAWhitespace());
-            this.leaveCurrentPath();
+          addExpression(this.currentExpression(), aWhitespace());
+          addExpression(this.currentExpression(), notAWhitespace());
         }
         return this;
       }
@@ -334,39 +339,6 @@ export class Phrexp {
   // Loops //
 
   /**
-   * Specifiy that the next expression is repeated exactly count times.
-   *
-   * @param {number} count
-   * @memberof Phrexp
-   */
-  public repeat(count: number): Phrexp {
-    return this;
-  }
-
-  /**
-   * Specifiy that the next expression is repeated one or more times..
-   *
-   * @returns {Expression}
-   * @memberof Phrexp
-   */
-  public oneOrMore(): Phrexp {
-    return this;
-  }
-
-  /**
-   * Match the value greater than or equal to min number of times. Or of upper is set.
-   * Match the value between min and max (inclusive) number of times.
-   *
-   * @param {string} value
-   * @param {number} lower
-   * @param {number} [upper]
-   * @memberof Phrexp
-   */
-  public multiple(value: string, lower: number, upper?: number) {
-    return this;
-  }
-
-  /**
    * Starts a capturing group.
    *
    * @memberof Phrexp
@@ -393,6 +365,37 @@ export class Phrexp {
       this.leaveCurrentPath();
     } else {
       throw new Error('the current expression is not a capturing group');
+    }
+    return this;
+  }
+
+  /**
+   * Starts a non capturing group.
+   *
+   * @memberof Phrexp
+   */
+  public beginNonCapture() {
+    const noncapturingGroup: NoncapturingGroup = new INoncapturingGroup(
+      getEmptyExpression()
+    );
+    addExpression(this.currentExpression(), noncapturingGroup);
+    this.currentPath.push(noncapturingGroup);
+    return this;
+  }
+
+  /**
+   * Ends a non capturing group.
+   *
+   * @memberof Phrexp
+   */
+  public endNonCapture() {
+    if (
+      (this.currentExpression() as any).type === 'Group' &&
+      (this.currentExpression() as any).capturing === false
+    ) {
+      this.leaveCurrentPath();
+    } else {
+      throw new Error('the current expression is not a non capturing group');
     }
     return this;
   }
@@ -459,13 +462,10 @@ export class Phrexp {
    * @memberof Phrexp
    */
   public endRepetition() {
-    if (
-      (this.currentExpression() as any).type === 'Group' &&
-      (this.currentExpression() as any).capturing === false
-    ) {
+    if ((this.currentExpression() as any).type === 'Repetition') {
       this.leaveCurrentPath();
     } else {
-      throw new Error('the current expression is not a non capturing group');
+      throw new Error('the current expression is not a repetition');
     }
     return this;
   }
@@ -477,7 +477,7 @@ export class Phrexp {
    * @memberof Phrexp
    */
   public toRegExp(): RegExp {
-    return generate(this.astRegExp);
+    return toRegExp(generate(this.astRegExp));
   }
 
   /**

@@ -49,3 +49,42 @@ export function anyChar(): ISpecialChar{
 }
 
 
+// meta character are: ., \f, \r, \n, \t, \v, \0, [\b] (backspace char), \s, \S, \w, \W, \d, \D.
+
+/** A tab character */
+export const tabChararacter = '\t';
+export function aTab(): ISpecialChar {
+    return new ISpecialChar(tabChararacter, 'meta');
+  }
+
+  /** An AlphaNumeric */
+  export function anAlphaNumeric(): ISpecialChar {
+    return new ISpecialChar('\\w', 'meta');
+  }
+
+  /** Not an AlphaNumeric */
+  export function notAnAlphaNumeric(): ISpecialChar {
+      return new ISpecialChar('\\w', 'meta');
+    }
+
+  /** A digit */
+  export function aDigit(): ISpecialChar {
+    return new ISpecialChar('\\d', 'meta');
+  }
+
+  /** Not A digit */
+  export function notADigit(): ISpecialChar {
+      return new ISpecialChar('\\D', 'meta');
+  }
+
+
+  /** A whitespace character */
+  export function aWhitespace(): ISpecialChar {
+    return new ISpecialChar('\\s', 'meta');
+  }
+  /** Not a whitespace character */
+  export function notAWhitespace(): ISpecialChar {
+    return new ISpecialChar('\\S', 'meta');
+  }
+
+
