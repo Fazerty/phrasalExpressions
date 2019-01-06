@@ -41,7 +41,7 @@ describe('Phrexp to regexp using repetitions', function() {
     ]);
   });
 
-  it('Regexp for excatly 3 repetitions of a digit should be /\\d{3}/gm', () => {
+  it('Regexp for exactly 3 repetitions of an alphanumeric followed by a tab should be /\\w{3}\t/gm', () => {
     const regexp: RegExp = new Phrexp()
       .beginRepetition(3, 3)
       .findChar('alphanumeric').endRepetition().findChar('tab')

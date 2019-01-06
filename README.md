@@ -28,10 +28,16 @@ npm install phrasalExpressions --save
 ```typescript
 import {Phrexp} from "phrasalExpressions";
 
-const regexp: Regexp = new Phrexp()
+//  Regexp to match e character
+const regexp1: Regexp = new Phrexp()
                             .findChar('e')
                             .toRegExp();
 
+// Regexp for exactly 3 repetitions of an alphanumeric followed by a tab
+const regexp2: RegExp = new Phrexp()
+      .beginRepetition(3, 3)
+      .findChar('alphanumeric').endRepetition().findChar('tab')
+      .toRegExp();
 ```
 
 
