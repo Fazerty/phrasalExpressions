@@ -47,7 +47,6 @@ import { IDisjunction } from './ast/IDisjunction';
 import {
   CharacterClass,
   ClassRange,
-  SpecialChar,
   NoncapturingGroup,
 } from './ast/interfaces';
 import { ICharacterClass } from './ast/iCharacterClass';
@@ -82,7 +81,7 @@ export class Phrexp {
    * @type {AstRegExp}
    * @memberof Phrexp
    */
-  private astRegExp: AstRegExp = new IAstRegExp();
+  public astRegExp: AstRegExp = new IAstRegExp();
 
   /**
    *
@@ -107,7 +106,9 @@ export class Phrexp {
       }
       case 'any': {
         // characters and linebreaks
-        if (this.currentExpression().type !== 'CharacterClass' && this.currentExpression().type !== 'Repetition' ) {
+        if (
+          this.currentExpression().type !== 'CharacterClass'
+        ) {
           const characterClass: CharacterClass = new ICharacterClass();
           addExpression(this.currentExpression(), characterClass);
           this.currentPath.push(characterClass);
@@ -189,21 +190,27 @@ export class Phrexp {
    * @memberof Phrexp
    */
   public findInChars(...values: string[]): Phrexp {
-    const characterClass: ICharacterClass = new ICharacterClass();
-    addExpression(this.currentExpression(), characterClass);
-    this.currentPath.push();
+    let expression: ParentExpression= this.currentExpression();
+    if (values.length > 1) {
+      const disjunction: IDisjunction = new IDisjunction(); // better choice than characterclass
+      addExpression(this.currentExpression(), disjunction);
+      expression = disjunction;
+      this.currentPath.push(disjunction);
+    }
     values.forEach((value: string) => {
       if (value.length === 2) {
         const range: ClassRange = new IClassRange(
           new ISimpleChar(value[0]),
           new ISimpleChar(value[1])
         );
-        addExpression(characterClass, range);
+        addExpression(expression, range);
         return;
       }
       this.findChar(value);
     });
-    this.leaveCurrentPath();
+    if (values.length > 1) {
+      this.leaveCurrentPath();
+    }
     return this;
   }
 

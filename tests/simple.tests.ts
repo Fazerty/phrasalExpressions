@@ -22,9 +22,9 @@ describe('Simple Phrexp to regexp', function() {
     assert.deepEqual(phrase.match(regexp), ['a','b','c','d','e','f','g','1','2','3','4','5','6','\n','a','b','c','\t','1','2','3'," ","'","(","-",")","."]);
   });
 
-  it("Regexp for any digit or tab or char 'a' should be /[d\ta]/gm", () => {
+  it("Regexp for any digit or tab or char 'a' should be /d|\t|a/gm", () => {
     const regexp: RegExp = new Phrexp().findInChars('digit', 'tab', 'a').toRegExp();
-    assert.equal(regexp.toString(), '/[\\d\ta]/gm');
+    assert.equal(regexp.toString(), '/\\d|\t|a/gm');
     assert.deepEqual(phrase.match(regexp), ['a','1','2','3','4','5','6','a','\t','1','2','3']);
   });
 
