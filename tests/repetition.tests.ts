@@ -1,7 +1,9 @@
-import { Phrexp } from '../src/phrasalexpressions';
+import { Phrexp } from '../src/phrasalExpressions';
 import { assert } from 'chai';
 
 const phrase: string = "abcdefg123456\nabc\t123 '(-).";
+
+
 
 describe('Phrexp to regexp using repetitions', function() {
   it('Regexp for excatly 3 repetitions of a digit should be /\\d{3}/gm', () => {

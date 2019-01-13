@@ -1,4 +1,4 @@
-import { SpecialChar} from './interfaces';
+import { SpecialChar} from 'regexp-tree/ast';
 
 //
 type scMetaKind = 'meta';

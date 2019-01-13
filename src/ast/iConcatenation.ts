@@ -1,4 +1,4 @@
-import { Alternative, Expression } from './interfaces';
+import { Alternative, Expression } from 'regexp-tree/ast';
 
 export class IConcatenation implements Alternative {
     // Alternative is not the good term. Concatenation, Chain are better.

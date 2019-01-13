@@ -1,4 +1,4 @@
-import { LookaroundAssertion, Expression } from './interfaces';
+import { LookaroundAssertion, Expression } from 'regexp-tree/ast';
 
 type AssertionKind = 'Lookahead' | 'Lookbehind';
 

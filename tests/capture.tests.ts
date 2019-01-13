@@ -1,9 +1,11 @@
-import { Phrexp } from '../src/phrasalexpressions';
+import { Phrexp } from '../src/phrasalExpressions';
 import { assert } from 'chai';
 
 const phrase: string = "abcdefg123456\nabc\t123 '(-).";
 
-describe('Phrexp to regexp using captures', function() {
+
+describe('Phrexp to regexp using captures', function () {
+
   it("Regexp to capture  a repetition of anything preceded by 'ab' and followed by a digit should be /ab([\\s\\S]*)\\d/gm", () => {
     const regexp: RegExp = new Phrexp()
       .findString('ab')

@@ -1,7 +1,7 @@
 import {
     Expression,
     NoncapturingGroup
-} from './interfaces';
+} from 'regexp-tree/ast';
 
 export class INoncapturingGroup implements NoncapturingGroup {
     public expression: Expression;

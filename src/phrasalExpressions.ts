@@ -10,7 +10,10 @@ import {
   Quantifier,
   Group,
   Disjunction,
-} from './ast/interfaces';
+  CharacterClass,
+  ClassRange,
+  NoncapturingGroup,
+} from 'regexp-tree/ast';
 import {
   addExpression,
   sanitize,
@@ -44,26 +47,9 @@ import {
 } from './ast/iSimpleQuantifier';
 import { IRangeQuantifier } from './ast/iRangeQuantifier';
 import { IDisjunction } from './ast/IDisjunction';
-import {
-  CharacterClass,
-  ClassRange,
-  NoncapturingGroup,
-} from './ast/interfaces';
 import { ICharacterClass } from './ast/iCharacterClass';
 import { IClassRange } from './ast/iClassRange';
 import { anyChar } from './ast/iSpecialChar';
-
-declare module 'regexp-tree' {
-  interface ParserOptions {
-    captureLocations?: boolean;
-  }
-
-  export function parse(s: string | RegExp, options?: ParserOptions): AstRegExp;
-
-  export function generate(ast: AstRegExp): string;
-
-  export function toRegExp(regexp: string): RegExp;
-}
 
 /**
  *
@@ -94,7 +80,8 @@ export class Phrexp {
 
   /**
    * Find a simple char
-   * specials (more than 2 characters) ('char' ,'any', 'digit', 'notDigit' , 'alphanumeric', 'notAlphanumeric', 'whitespace', 'notWhitespace', 'tab')
+   * or a range of simple chars (2 characters)
+   * or specials (more than 2 characters) ('char' ,'any', 'digit', 'notDigit' , 'alphanumeric', 'notAlphanumeric', 'whitespace', 'notWhitespace', 'tab')
    * @param {string} value
    * @memberof Phrexp
    */
@@ -106,9 +93,7 @@ export class Phrexp {
       }
       case 'any': {
         // characters and linebreaks
-        if (
-          this.currentExpression().type !== 'CharacterClass'
-        ) {
+        if (this.currentExpression().type !== 'CharacterClass') {
           const characterClass: CharacterClass = new ICharacterClass();
           addExpression(this.currentExpression(), characterClass);
           this.currentPath.push(characterClass);
@@ -155,11 +140,39 @@ export class Phrexp {
           addExpression(this.currentExpression(), newChar);
           return this;
         }
+        if (value.length === 2 && value.charCodeAt(0) < value.charCodeAt(1)) {
+          const newChar: ClassRange = new IClassRange(
+            new ISimpleChar(value[0]),
+            new ISimpleChar(value[1])
+          );
+          addExpression(this.currentExpression(), newChar);
+          return this;
+        }
       }
     }
     throw new Error(value + ' is not allowed');
   }
+  public static findCharKey = 'findChar';
 
+  public findLineBreak(): Phrexp {
+    return this.findChar('lineBreak');
+  }
+  public static findLineBreakKey = 'findLineBreak';
+
+  public findTab(): Phrexp {
+    return this.findChar('tab');
+  }
+  public static findTabKey = 'findTab';
+
+  public findDigit(): Phrexp {
+    return this.findChar('digit');
+  }
+  public static findDigitKey = 'findDigit';
+
+  public findWhitespace(): Phrexp {
+    return this.findChar('whitespace');
+  }
+  public static findWhitespaceKey = 'findWhitespace';
   /**
    * Find any character
    *
@@ -170,6 +183,7 @@ export class Phrexp {
     this.findChar('char');
     return this;
   }
+  public static findAnyCharKey = 'findAnyChar';
 
   /**
    * Find any character linebreaks included
@@ -181,6 +195,7 @@ export class Phrexp {
     this.findChar('any');
     return this;
   }
+  public static findAnythingKey = 'findAnything';
 
   /**
    * Find a char that matchs one of the chars or ranges in the values.
@@ -190,7 +205,7 @@ export class Phrexp {
    * @memberof Phrexp
    */
   public findInChars(...values: string[]): Phrexp {
-    let expression: ParentExpression= this.currentExpression();
+    let expression: ParentExpression = this.currentExpression();
     if (values.length > 1) {
       const disjunction: IDisjunction = new IDisjunction(); // better choice than characterclass
       addExpression(this.currentExpression(), disjunction);
@@ -213,6 +228,42 @@ export class Phrexp {
     }
     return this;
   }
+  public static findInCharsKey = 'findInChars';
+
+  /**
+   * Find a char that doesn't match one of the chars or ranges in the values.
+   *
+   * @param {string} values a list of character, ranges (two characters) or
+   *
+   * @memberof Phrexp
+   */
+  public findNotInChars(...values: string[]): Phrexp {
+    // TODO:  'any' => throw an error
+    let expression: ParentExpression = this.currentExpression();
+    if (values.length > 1) {
+      const characterClass: ICharacterClass = new ICharacterClass(); // better choice than disjunction
+      characterClass.negative = true;
+      addExpression(this.currentExpression(), characterClass);
+      expression = characterClass;
+      this.currentPath.push(characterClass);
+    }
+    values.forEach((value: string) => {
+      if (value.length === 2) {
+        const range: ClassRange = new IClassRange(
+          new ISimpleChar(value[0]),
+          new ISimpleChar(value[1])
+        );
+        addExpression(expression, range);
+        return;
+      }
+      this.findChar(value);
+    });
+    if (values.length > 1) {
+      this.leaveCurrentPath();
+    }
+    return this;
+  }
+  public static findNotInCharsKey = 'findNotInChars';
 
   /**
    * Add a string to the expression
@@ -231,6 +282,7 @@ export class Phrexp {
     addExpression(this.currentExpression(), concatenation);
     return this;
   }
+  public static findStringKey = 'findString';
 
   // Assertions //
 
@@ -244,6 +296,7 @@ export class Phrexp {
     addExpression(this.currentExpression(), startOfLine);
     return this;
   }
+  public static startOfLineKey = 'startOfLine';
 
   /**
    * Mark the end at the last character of the line.
@@ -255,19 +308,21 @@ export class Phrexp {
     addExpression(this.currentExpression(), startOfLine);
     return this;
   }
+  public static endOfLineKey = 'endOfLine';
 
   /**
-   * Add a string to the expression that might appear once (or not).
+   * Add a sequence of characters to the expression that might appear once (or not).
    *
    * @param {Expression} value
    * @memberof Phrexp
    */
-  public maybe(value: string): Phrexp {
+  public maybe(values: string[]): Phrexp {
     this.beginRepetition(0, 1);
-    this.findString(value);
+    this.findInChars(...values);
     this.endRepetition();
     return this;
   }
+  public static maybeKey = 'maybe';
 
   /**
    * Match any character(s) or linebreaks any (including zero) number of times.
@@ -277,10 +332,11 @@ export class Phrexp {
    */
   public anything(): Phrexp {
     this.beginRepetition(0);
-    this.findInChars();
+    this.findAnything();
     this.endRepetition();
     return this;
   }
+  public static anythingKey = 'anything';
 
   /**
    * Match any character(s) or linebreaks any (including zero) number of times expect characters in the value.
@@ -289,9 +345,13 @@ export class Phrexp {
    * @param {(Expression | string[])} value
    * @memberof Phrexp
    */
-  public anythingBut(value: string): Phrexp {
+  public anythingBut(values: string[]): Phrexp {
+    this.beginRepetition(0);
+    this.findNotInChars(...values);
+    this.endRepetition();
     return this;
   }
+  public static anythingButKey = 'anythingBut';
 
   /**
    * Match any character(s) or linebreaks at least once.
@@ -300,8 +360,12 @@ export class Phrexp {
    * @memberof Phrexp
    */
   public something(): Phrexp {
+    this.beginRepetition(1);
+    this.findAnything();
+    this.endRepetition();
     return this;
   }
+  public static somethingKey = 'something';
 
   /**
    * Match any character(s)  or linebreaks at least once except the ones in the value.
@@ -309,39 +373,34 @@ export class Phrexp {
    * @returns {Expression}
    * @memberof Phrexp
    */
-  public somethingBut(value: string[]): Phrexp {
+  public somethingBut(values: string[]): Phrexp {
+    this.beginRepetition(1);
+    this.findNotInChars(...values);
+    this.endRepetition();
     return this;
   }
+  public static somethingButKey = 'somethingBut';
 
   /**
-   * Match any of the provided strings
-   *
-   * @param {(Expression | string[])} value
-   * @memberof Phrexp
-   */
-  public anyOf(value: string[]): Phrexp {
-    return this;
-  }
-
-  /**
-   * Ensure that the parameter does not follow.
-   *
-   * @param {Expression} value
-   * @memberof Phrexp
-   */
-  public not(value: Expression): Phrexp {
-    return this;
-  }
-
-  /**
-   * Add expression to match a range (or multiply ranges)
+   * Add expression to match a range (or multiply ranges). Ranges must be 2 characters.
+   * The first character code of a range is smaller or equal to the code of the second character.
    *
    * @param {...string[]} values
    * @memberof Phrexp
    */
   public range(...values: string[]): Phrexp {
+    this.beginDisjunction();
+    values.forEach((value: string) => {
+      if (value.length === 2) {
+        this.findChar(value);
+      } else {
+        throw new Error();
+      }
+    });
     return this;
   }
+
+  public static rangeKey = 'range';
 
   // Loops //
 
@@ -358,7 +417,7 @@ export class Phrexp {
     this.currentPath.push(capturingGroup);
     return this;
   }
-
+  public static beginCaptureKey = 'beginCapture';
   /**
    * Ends a capturing group.
    *
@@ -375,13 +434,14 @@ export class Phrexp {
     }
     return this;
   }
+  public static endCaptureKey = 'endCapture';
 
   /**
    * Starts a non capturing group.
    *
    * @memberof Phrexp
    */
-  public beginNonCapture() {
+  public beginGroup() {
     const noncapturingGroup: NoncapturingGroup = new INoncapturingGroup(
       getEmptyExpression()
     );
@@ -389,13 +449,14 @@ export class Phrexp {
     this.currentPath.push(noncapturingGroup);
     return this;
   }
+  public static beginGroupKey = 'beginGroup';
 
   /**
    * Ends a non capturing group.
    *
    * @memberof Phrexp
    */
-  public endNonCapture() {
+  public endGroup() {
     if (
       (this.currentExpression() as any).type === 'Group' &&
       (this.currentExpression() as any).capturing === false
@@ -407,6 +468,7 @@ export class Phrexp {
     return this;
   }
 
+  public static endGroupKey = 'endGroup';
   /**
    * Start a disjunction
    *
@@ -419,6 +481,7 @@ export class Phrexp {
     this.currentPath.push(disjunction);
     return this;
   }
+  public static beginDisjunctionKey = 'beginDisjunction';
 
   /**
    * Ends a disjunction.
@@ -434,6 +497,7 @@ export class Phrexp {
     return this;
   }
 
+  public static endDisjunctionKey = 'endDisjunction';
   /**
    * Starts a repetition.
    *
@@ -462,6 +526,7 @@ export class Phrexp {
     this.currentPath.push(repetition);
     return this;
   }
+  public static beginRepetitionKey = 'beginRepetition';
 
   /**
    * Ends a repetition.
@@ -476,6 +541,7 @@ export class Phrexp {
     }
     return this;
   }
+  public static endRepetitionKey = 'endRepetition';
 
   /**
    * Converts the Ast Expression to a RegExp object

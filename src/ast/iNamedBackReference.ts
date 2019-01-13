@@ -1,4 +1,4 @@
-import { NamedBackreference } from './interfaces';
+import { NamedBackreference } from 'regexp-tree/ast';
 
 export class INamedBackreference implements NamedBackreference {
     // Alternative is not the good term. Concatenation, Chain are better.

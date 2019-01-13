@@ -1,5 +1,5 @@
 import { Location } from './location';
-import { AstRegExp, Expression } from './interfaces';
+import { AstRegExp, Expression } from 'regexp-tree/ast';
 
 // global match; find all matches rather than stopping after the first match
 type globalMatchFlag = 'g';

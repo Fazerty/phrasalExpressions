@@ -1,4 +1,4 @@
-import { Expression, NumericBackreference } from './interfaces';
+import { Expression, NumericBackreference } from 'regexp-tree/ast';
 
 export class INumericBackreference implements NumericBackreference {
     // Alternative is not the good term. Concatenation, Chain are better.

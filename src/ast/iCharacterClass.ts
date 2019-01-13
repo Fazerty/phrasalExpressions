@@ -1,5 +1,5 @@
 import { aWhitespace, notAWhitespace, aTab, aDigit } from './iSpecialChar';
-import { CharacterClass, Char, ClassRange } from './interfaces';
+import { CharacterClass, Char, ClassRange } from 'regexp-tree/ast';
 
 export class ICharacterClass implements CharacterClass {
   public type: any = 'CharacterClass';

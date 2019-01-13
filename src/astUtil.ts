@@ -11,7 +11,8 @@ import {
   AstRegExp,
   ClassRange,
   LookaroundAssertion,
-} from './ast/interfaces';
+  SpecialChar,
+} from 'regexp-tree/ast';
 import { ICharacterClass } from './ast/iCharacterClass';
 import { IClassRange } from './ast/iClassRange';
 import { ISimpleChar } from './ast/iSimpleChar';
@@ -25,7 +26,6 @@ import { INamedBackreference } from './ast/iNamedBackReference';
 import { INumericBackreference } from './ast/iNumericBackReference';
 import { ISimpleAssertion } from './ast/iSimpleAssertion';
 import { ILookaroundAssertion } from './ast/iLookaroundAssertion';
-import { SpecialChar } from './ast/interfaces';
 
 // Classes allowed as parent
 export type ParentExpression =

@@ -1,4 +1,4 @@
-import { Repetition, Quantifier, Expression } from './interfaces';
+import { Repetition, Quantifier, Expression } from 'regexp-tree/ast';
 
 export class IRepetition implements Repetition {
     public expression: Expression;

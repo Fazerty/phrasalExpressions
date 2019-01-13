@@ -1,4 +1,4 @@
-import { SimpleAssertion } from './interfaces';
+import { SimpleAssertion } from 'regexp-tree/ast';
 
 type StartOfLine = '^';
 export const StartOfLine = '^';

@@ -1,7 +1,7 @@
 import {
     Expression,
     CapturingGroup
-} from './interfaces';
+} from 'regexp-tree/ast';
 
 export class ICapturingGroup implements CapturingGroup {
     public expression: Expression | null;

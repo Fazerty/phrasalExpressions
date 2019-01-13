@@ -1,4 +1,4 @@
-import { Disjunction, Expression } from './interfaces';
+import { Disjunction, Expression } from 'regexp-tree/ast';
 
 export class IDisjunction implements Disjunction {
     public expressions: Expression[];

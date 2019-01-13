@@ -1,4 +1,4 @@
-import { RangeQuantifier } from './interfaces';
+import { RangeQuantifier } from 'regexp-tree/ast';
 
 export class IRangeQuantifier implements RangeQuantifier {
   public kind: 'Range' = 'Range';

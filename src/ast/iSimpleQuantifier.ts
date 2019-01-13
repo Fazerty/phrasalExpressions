@@ -1,4 +1,4 @@
-import { SimpleQuantifier } from './interfaces';
+import { SimpleQuantifier } from 'regexp-tree/ast';
 
 export const zeroOrMore = '*';
 type zeroOrMore = '*';

@@ -1,4 +1,4 @@
-import { SimpleChar } from './interfaces';
+import { SimpleChar } from 'regexp-tree/ast';
 
 type SimpleCharKind = 'simple';
 

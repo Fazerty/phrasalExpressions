@@ -1,4 +1,4 @@
-import { ClassRange, Char } from './interfaces';
+import { ClassRange, Char } from 'regexp-tree/ast';
 
 export class IClassRange implements ClassRange {
     public from: Char;
