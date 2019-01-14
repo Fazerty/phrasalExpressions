@@ -1,6 +1,6 @@
 {
   "name": "phrasalexpressions",
-  "version": "1.0.4-alpha",
+  "version": "1.0.5-alpha",
   "description": "Helps to create regular expressions in typescript from phrases.",
   "main": "dist/phrasalexpressions.js",
   "typings": "dist/phrasalexpressions.d.ts",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/Fazerty/phrasalExpressions#readme",
   "dependencies": {
-    "regexp-tree": "0.0.85"
+    "regexp-tree": "^0.0.86"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
