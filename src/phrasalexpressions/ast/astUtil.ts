@@ -13,19 +13,19 @@ import {
   LookaroundAssertion,
   SpecialChar,
 } from 'regexp-tree/ast';
-import { ICharacterClass } from './ast/iCharacterClass';
-import { IClassRange } from './ast/iClassRange';
-import { ISimpleChar } from './ast/iSimpleChar';
-import { ISpecialChar } from './ast/iSpecialChar';
-import { IConcatenation } from './ast/iConcatenation';
-import { IDisjunction } from './ast/IDisjunction';
-import { INoncapturingGroup } from './ast/iNonCapturingGroup';
-import { ICapturingGroup } from './ast/iCapturingGroup';
-import { IRepetition } from './ast/IRepetion';
-import { INamedBackreference } from './ast/iNamedBackReference';
-import { INumericBackreference } from './ast/iNumericBackReference';
-import { ISimpleAssertion } from './ast/iSimpleAssertion';
-import { ILookaroundAssertion } from './ast/iLookaroundAssertion';
+import { ICharacterClass } from './iCharacterClass';
+import { IClassRange } from './iClassRange';
+import { ISimpleChar } from './iSimpleChar';
+import { ISpecialChar } from './iSpecialChar';
+import { IConcatenation } from './iConcatenation';
+import { IDisjunction } from './IDisjunction';
+import { INoncapturingGroup } from './iNonCapturingGroup';
+import { ICapturingGroup } from './iCapturingGroup';
+import { IRepetition } from './IRepetion';
+import { INamedBackreference } from './iNamedBackReference';
+import { INumericBackreference } from './iNumericBackReference';
+import { ISimpleAssertion } from './iSimpleAssertion';
+import { ILookaroundAssertion } from './iLookaroundAssertion';
 
 // Classes allowed as parent
 export type ParentExpression =

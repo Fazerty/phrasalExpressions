@@ -1,4 +1,4 @@
-import { Phrexp } from '../src/phrasalExpressions';
+import { Phrexp } from '../src/phrasalexpressions';
 import { assert } from 'chai';
 
 const phrase: string = "abcdefg123456\nabc\t123 '(-).";

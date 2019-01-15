@@ -1,4 +1,4 @@
-import { Language } from '../phrasalDefinitions';
+import { Language } from './phrasalDefinitions';
 import { Separator } from './separator';
 
 /**

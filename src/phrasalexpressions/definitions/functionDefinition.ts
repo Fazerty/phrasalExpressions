@@ -1,4 +1,4 @@
-import { Language } from '../phrasalDefinitions';
+import { Language } from './phrasalDefinitions';
 
 export const functionDefinitions: Map<string, FunctionDefinition> = new Map<string, FunctionDefinition>();
 

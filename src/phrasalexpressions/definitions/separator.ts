@@ -1,4 +1,4 @@
-import { Language } from '../phrasalDefinitions';
+import { Language } from './phrasalDefinitions';
 export const separators: Map<string, Separator> = new Map<
   string,
   Separator

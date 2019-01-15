@@ -1,9 +1,9 @@
-import { Phrexp } from '../src/phrasalExpressions';
+import { Phrexp } from '../src/phrasalexpressions';
 import { assert } from 'chai';
-import { PhrasalExpressionElement } from '../src/definitions/phrasalExpressionElement';
-import { phrasalExpressionDefinitions } from '../src/definitions/phrasalExpressionDefinitions';
-import { PhrasalExpressionDefinition } from '../src/definitions/phrasalExpressionDefinition';
-import { createPhrexpFromElements } from '../src/phrasalDefinitions';
+import { PhrasalExpressionElement } from '../src/phrasalexpressions/definitions/phrasalExpressionElement';
+import { phrasalExpressionDefinitions } from '../src/phrasalexpressions/definitions/phrasalExpressionDefinitions';
+import { PhrasalExpressionDefinition } from '../src/phrasalexpressions/definitions/phrasalExpressionDefinition';
+import { createPhrexpFromElements } from '../src/phrasalexpressions/definitions/phrasalDefinitions';
 
 const phrase: string = 'abcdefg123456\nabc\t123 \'(-).'
 

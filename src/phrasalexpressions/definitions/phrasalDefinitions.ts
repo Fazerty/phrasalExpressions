@@ -1,11 +1,11 @@
-import { Phrexp } from './phrasalExpressions';
-import { PhrasalExpressionDefinition } from './definitions/phrasalExpressionDefinition';
-import { PhrasalExpressionElement } from './definitions/phrasalExpressionElement';
-import { functionPhrases, FunctionPhrase } from './definitions/functionPhrase';
+import { Phrexp } from '../../phrasalexpressions';
+import { PhrasalExpressionDefinition } from './phrasalExpressionDefinition';
+import { PhrasalExpressionElement } from './phrasalExpressionElement';
+import { functionPhrases, FunctionPhrase } from './functionPhrase';
 import {
   FunctionDefinition,
   functionDefinitions,
-} from './definitions/functionDefinition';
+} from './functionDefinition';
 import {
   phrasalExpressionDefinitions,
   utilityGroup,
@@ -15,7 +15,7 @@ import {
   modifiersGroup,
   specialCharactersGroup,
   captureGroup,
-} from './definitions/phrasalExpressionDefinitions';
+} from './phrasalExpressionDefinitions';
 
 export type Language = 'en' | 'fr';
 

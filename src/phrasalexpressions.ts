@@ -19,13 +19,13 @@ import {
   sanitize,
   ParentExpression,
   getEmptyExpression,
-} from './astUtil';
+} from './phrasalexpressions/ast/astUtil';
 import {
   ISimpleAssertion,
   StartOfLine,
   EndOfLine,
-} from './ast/iSimpleAssertion';
-import { ISimpleChar } from './ast/iSimpleChar';
+} from './phrasalexpressions/ast/iSimpleAssertion';
+import { ISimpleChar } from './phrasalexpressions/ast/iSimpleChar';
 import {
   aWhitespace,
   notAWhitespace,
@@ -33,23 +33,24 @@ import {
   anAlphaNumeric,
   notAnAlphaNumeric,
   aTab,
-} from './ast/iSpecialChar';
-import { IAstRegExp } from './ast/iAstRegExp';
-import { ICapturingGroup } from './ast/iCapturingGroup';
-import { INoncapturingGroup } from './ast/iNonCapturingGroup';
-import { IConcatenation } from './ast/iConcatenation';
-import { IRepetition } from './ast/IRepetion';
+} from './phrasalexpressions/ast/iSpecialChar';
+//import { IAstRegExp } from './phrasalexpressions/ast/iAstRegExp';
+import { ICapturingGroup } from './phrasalexpressions/ast/iCapturingGroup';
+import { INoncapturingGroup } from './phrasalexpressions/ast/iNonCapturingGroup';
+import { IConcatenation } from './phrasalexpressions/ast/iConcatenation';
+import { IRepetition } from './phrasalexpressions/ast/IRepetion';
 import {
   ISimpleQuantifier,
   zeroOrMore,
   oneOrMore,
   zeroOrOne,
-} from './ast/iSimpleQuantifier';
-import { IRangeQuantifier } from './ast/iRangeQuantifier';
-import { IDisjunction } from './ast/IDisjunction';
-import { ICharacterClass } from './ast/iCharacterClass';
-import { IClassRange } from './ast/iClassRange';
-import { anyChar } from './ast/iSpecialChar';
+} from './phrasalexpressions/ast/iSimpleQuantifier';
+import { IRangeQuantifier } from './phrasalexpressions/ast/iRangeQuantifier';
+import { IDisjunction } from './phrasalexpressions/ast/IDisjunction';
+import { ICharacterClass } from './phrasalexpressions/ast/iCharacterClass';
+import { IClassRange } from './phrasalexpressions/ast/iClassRange';
+import { anyChar } from './phrasalexpressions/ast/iSpecialChar';
+import { IAstRegExp } from './phrasalexpressions/ast/iAstRegExp';
 
 /**
  *
