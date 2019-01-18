@@ -23,5 +23,6 @@ export * from './definitions/functionDefinition';
 export * from './definitions/functionPhrase';
 export * from './definitions/phrasalDefinitions';
 export * from './definitions/phrasalExpressionDefinition';
+export * from './definitions/phrasalExpressionDefinitions';
 export * from './definitions/phrasalExpressionElement';
 export * from './definitions/separator';
