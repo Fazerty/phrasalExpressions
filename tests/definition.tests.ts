@@ -3,7 +3,7 @@ import { assert } from 'chai';
 import { PhrasalExpressionElement } from '../src/definitions/phrasalExpressionElement';
 import { phrasalExpressionDefinitions } from '../src/definitions/phrasalExpressionDefinitions';
 import { PhrasalExpressionDefinition } from '../src/definitions/phrasalExpressionDefinition';
-import { createPhrexpFromElements } from '../src/definitions/phrasalDefinitions';
+import { createPhrexpFromElements, PhrexDef } from '../src/definitions/phrasalDefinitions';
 
 const phrase: string = 'abcdefg123456\nabc\t123 \'(-).'
 
@@ -21,4 +21,10 @@ describe('Phrasal Expression Definitions to regexp ', function() {
     assert.equal(regexp.toString(), '/e/gm');
     assert.deepEqual(phrase.match(regexp), ['e']);
   });
+
+  it("Number of capture definitions is 4", () => {
+    const phrexDef: PhrexDef = new PhrexDef('en');
+    assert.equal(phrexDef.captureDefinitions.length, 4);
+  });
+
 });

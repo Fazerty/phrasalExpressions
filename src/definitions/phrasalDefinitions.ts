@@ -30,6 +30,7 @@ export class PhrexDef {
   constructor(lang: Language) {
     this.lang = lang;
     this.allDefinitions = this.getPhrasalExpressionDefinitions();
+    this.initGroups()
   }
 
   public setLanguage(newLang: Language) {
@@ -73,44 +74,54 @@ export class PhrexDef {
         }
       );
   }
- public utilityDefinitions = this.allDefinitions.filter(
+  public utilityDefinitions: PhrasalExpressionDefinition[] = new Array<PhrasalExpressionDefinition>();
+  public rulesDefinitions: PhrasalExpressionDefinition[] = new Array<PhrasalExpressionDefinition>();
+  public miscellaneousDefinitions: PhrasalExpressionDefinition[] = new Array<PhrasalExpressionDefinition>();
+  public loopsDefinitions: PhrasalExpressionDefinition[] = new Array<PhrasalExpressionDefinition>();
+  public modifiersDefinitions: PhrasalExpressionDefinition[] = new Array<PhrasalExpressionDefinition>();
+  public specialCharactersDefinitions: PhrasalExpressionDefinition[] = new Array<PhrasalExpressionDefinition>();
+  public captureDefinitions: PhrasalExpressionDefinition[] = new Array<PhrasalExpressionDefinition>();
+
+private initGroups(){
+  this.utilityDefinitions = this.allDefinitions.filter(
     (value: PhrasalExpressionDefinition) => {
       return value.group === utilityGroup ? true : false;
     }
   );
 
-  public  rulesDefinitions = this.allDefinitions.filter(
+  this.rulesDefinitions = this.allDefinitions.filter(
     (value: PhrasalExpressionDefinition) => {
       return value.group === rulesGroup ? true : false;
     }
   );
-  public  miscellaneousDefinitions = this.allDefinitions.filter(
+  this.miscellaneousDefinitions = this.allDefinitions.filter(
     (value: PhrasalExpressionDefinition) => {
       return value.group === miscellaneousGroup ? true : false;
     }
   );
-  public  loopsDefinitions = this.allDefinitions.filter(
+  this.loopsDefinitions = this.allDefinitions.filter(
     (value: PhrasalExpressionDefinition) => {
       return value.group === loopsGroup ? true : false;
     }
   );
 
-  public  modifiersDefinitions = this.allDefinitions.filter(
+  this.modifiersDefinitions = this.allDefinitions.filter(
     (value: PhrasalExpressionDefinition) => {
       return value.group === modifiersGroup ? true : false;
     }
   );
-  public  specialCharactersDefinitions = this.allDefinitions.filter(
+  this.specialCharactersDefinitions = this.allDefinitions.filter(
     (value: PhrasalExpressionDefinition) => {
       return value.group === specialCharactersGroup ? true : false;
     }
   );
 
-  public  captureDefinitions = this.allDefinitions.filter(
+  this.captureDefinitions = this.allDefinitions.filter(
     (value: PhrasalExpressionDefinition) => {
       return value.group === captureGroup ? true : false;
     }
   );
+}
 }
 
 export function createPhrexpFromElements(elts: PhrasalExpressionElement[]): Phrexp{
