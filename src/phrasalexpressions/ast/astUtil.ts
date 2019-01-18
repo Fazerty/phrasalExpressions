@@ -27,6 +27,7 @@ import { INumericBackreference } from './iNumericBackReference';
 import { ISimpleAssertion } from './iSimpleAssertion';
 import { ILookaroundAssertion } from './iLookaroundAssertion';
 
+
 // Classes allowed as parent
 export type ParentExpression =
   | CharacterClass
