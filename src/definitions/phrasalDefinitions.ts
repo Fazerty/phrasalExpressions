@@ -1,4 +1,4 @@
-import { Phrexp } from '../../phrasalexpressions';
+import { Phrexp } from '../main/phrasalexpressions';
 import { PhrasalExpressionDefinition } from './phrasalExpressionDefinition';
 import { PhrasalExpressionElement } from './phrasalExpressionElement';
 import { functionPhrases, FunctionPhrase } from './functionPhrase';

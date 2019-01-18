@@ -6,7 +6,7 @@
 import { PhrasalExpressionDefinition } from './phrasalExpressionDefinition';
 import { setPhrase } from './functionPhrase';
 import { setDefinition } from './functionDefinition';
-import { Phrexp} from '../../phrasalexpressions';
+import { Phrexp} from '../main/phrasalexpressions';
 import { separators } from './separator';
 export const stringType = 'string';
 export const numberType = 'number';

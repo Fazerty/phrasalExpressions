@@ -1,9 +1,9 @@
 {
   "name": "phrasalexpressions",
-  "version": "1.0.8-alpha",
+  "version": "1.0.9-alpha",
   "description": "Helps to create regular expressions in typescript from phrases.",
-  "main": "dist/phrasalexpressions.js",
-  "typings": "dist/phrasalexpressions.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc",
