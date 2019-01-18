@@ -2,6 +2,7 @@ import { Phrexp } from '../main/phrasalexpressions';
 import { PhrasalExpressionDefinition } from './phrasalExpressionDefinition';
 import { PhrasalExpressionElement } from './phrasalExpressionElement';
 import { functionPhrases, FunctionPhrase } from './functionPhrase';
+import { FunctionShortDefinition, functionShortDefinitions } from './functionShortDefinition';
 import {
   FunctionDefinition,
   functionDefinitions,
@@ -49,12 +50,22 @@ export class PhrexDef {
         const def: FunctionDefinition | undefined = functionDefinitions.get(
           phrasalExpressionDefinition.function
         );
+        const shortDefinition: FunctionShortDefinition | undefined = functionShortDefinitions.get(
+          phrasalExpressionDefinition.function
+        );
+
         phrasalExpressionDefinition.functionName = name
           ? name.getPhrase(this.lang)
           : phrasalExpressionDefinition.function;
+
         phrasalExpressionDefinition.definition = def
           ? def.getDefinition(this.lang)
           : '';
+
+        phrasalExpressionDefinition.shortDefinition = shortDefinition
+          ? shortDefinition.getDefinition(this.lang)
+          : phrasalExpressionDefinition.functionName;
+
         return phrasalExpressionDefinition;
       })
       .filter((value: PhrasalExpressionDefinition) => {

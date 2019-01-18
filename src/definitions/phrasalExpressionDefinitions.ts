@@ -8,6 +8,7 @@ import { setPhrase } from './functionPhrase';
 import { setDefinition } from './functionDefinition';
 import { Phrexp} from '../main/phrasalexpressions';
 import { separators } from './separator';
+import { setShortDefinition } from './functionShortDefinition';
 export const stringType = 'string';
 export const numberType = 'number';
 export const charRange = 'charRange';
@@ -61,7 +62,7 @@ setDefinition(Phrexp.findAnythingKey, 'fr', '')
 
 phrasalExpressionDefinitions.push({
   function: Phrexp.findInCharsKey,
-  argumentTypes: [],
+  argumentTypes: [stringType],
   group: rulesGroup,
   available: true,
 });
@@ -72,7 +73,7 @@ setDefinition(Phrexp.findInCharsKey, 'fr', '')
 
 phrasalExpressionDefinitions.push({
   function: Phrexp.findNotInCharsKey,
-  argumentTypes: [],
+  argumentTypes: [stringType],
   group: rulesGroup,
   available: true,
 });
@@ -83,7 +84,7 @@ setDefinition(Phrexp.findNotInCharsKey, 'fr', '')
 
 phrasalExpressionDefinitions.push({
   function: Phrexp.findStringKey,
-  argumentTypes: ['string'],
+  argumentTypes: [stringType],
   group: rulesGroup,
   available: true,
 });
@@ -183,17 +184,16 @@ setPhrase(Phrexp.rangeKey, 'fr', '')
 setDefinition(Phrexp.rangeKey, 'en', 'Add expression to match one or multiple ranges (any character within the range(s))')
 setDefinition(Phrexp.rangeKey, 'fr', '')
 
-// Special Characters //
-
-
 // Capture/ Group //
 phrasalExpressionDefinitions.push({
   function: Phrexp.beginCaptureKey,
   argumentTypes: [],
   group: captureGroup,
   available: true,
+  levelChange: 1,
+  closingFunction: Phrexp.endCaptureKey
 });
-setPhrase(Phrexp.beginCaptureKey, 'en', 'begin capture')
+setPhrase(Phrexp.beginCaptureKey, 'en', 'begin a capture')
 setPhrase(Phrexp.beginCaptureKey, 'fr', '')
 setDefinition(Phrexp.beginCaptureKey, 'en', 'Starts a Capturing group(used to extract data from the regexp match.')
 setDefinition(Phrexp.beginCaptureKey, 'fr', '')
@@ -203,8 +203,9 @@ phrasalExpressionDefinitions.push({
   argumentTypes: [],
   group: captureGroup,
   available: true,
+  levelChange: -1,
 });
-setPhrase(Phrexp.endCaptureKey, 'en', 'end capture')
+setPhrase(Phrexp.endCaptureKey, 'en', 'end a capture')
 setPhrase(Phrexp.endCaptureKey, 'fr', '')
 setDefinition(Phrexp.endCaptureKey, 'en', 'Ends a capturing group (Capture groups are used to extract data from the regexp match.)')
 setDefinition(Phrexp.endCaptureKey, 'fr', '')
@@ -214,8 +215,10 @@ phrasalExpressionDefinitions.push({
   argumentTypes: [],
   group: captureGroup,
   available: true,
+  levelChange: 1,
+  closingFunction: Phrexp.endGroupKey
 });
-setPhrase(Phrexp.beginGroupKey, 'en', 'begin group')
+setPhrase(Phrexp.beginGroupKey, 'en', 'begin a group')
 setPhrase(Phrexp.beginGroupKey, 'fr', '')
 setDefinition(Phrexp.beginGroupKey, 'en', 'Starts a group')
 setDefinition(Phrexp.beginGroupKey, 'fr', '')
@@ -225,8 +228,9 @@ phrasalExpressionDefinitions.push({
   argumentTypes: [],
   group: captureGroup,
   available: true,
+  levelChange: -1
 });
-setPhrase(Phrexp.endGroupKey, 'en', 'end group')
+setPhrase(Phrexp.endGroupKey, 'en', 'end a group')
 setPhrase(Phrexp.endGroupKey, 'fr', '')
 setDefinition(Phrexp.endGroupKey, 'en', 'Ends a Capturing group')
 setDefinition(Phrexp.endGroupKey, 'fr', '')
@@ -236,11 +240,15 @@ phrasalExpressionDefinitions.push({
   argumentTypes: [],
   group: rulesGroup,
   available: true,
-  separator: separators.get('or')
+  separator: separators.get('or'),
+  levelChange: 1,
+  closingFunction: Phrexp.endDisjunctionKey
 });
-setPhrase(Phrexp.beginDisjunctionKey, 'en', 'begin disjunction')
-setPhrase(Phrexp.beginDisjunctionKey, 'fr', '')
-setDefinition(Phrexp.beginDisjunctionKey, 'en', 'Begins a disjunction')
+setPhrase(Phrexp.beginDisjunctionKey, 'en', 'has wheter')
+setPhrase(Phrexp.beginDisjunctionKey, 'fr', 'a soit')
+setShortDefinition(Phrexp.beginDisjunctionKey, 'en', 'begin a choice')
+setShortDefinition(Phrexp.beginDisjunctionKey, 'fr', 'commence un choix')
+setDefinition(Phrexp.beginDisjunctionKey, 'en', 'Begins a choice')
 setDefinition(Phrexp.beginDisjunctionKey, 'fr', '')
 
 phrasalExpressionDefinitions.push({
@@ -248,9 +256,12 @@ phrasalExpressionDefinitions.push({
   argumentTypes: [],
   group: rulesGroup,
   available: true,
+  levelChange: -1
 });
-setPhrase(Phrexp.endDisjunctionKey, 'en', 'end disjunction')
-setPhrase(Phrexp.endDisjunctionKey, 'fr', '')
+setPhrase(Phrexp.endDisjunctionKey, 'en', '.')
+setPhrase(Phrexp.endDisjunctionKey, 'fr', '.')
+setShortDefinition(Phrexp.endDisjunctionKey, 'en', 'end a choice')
+setShortDefinition(Phrexp.endDisjunctionKey, 'fr', 'fin du choix')
 setDefinition(Phrexp.endDisjunctionKey, 'en', 'Ends a disjunction')
 setDefinition(Phrexp.endDisjunctionKey, 'fr', '')
 
